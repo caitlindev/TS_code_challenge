@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+   ____     _                   _     _
+ /      \  | |_ ___ _ __   __ _| |__ | | ___
+/   /\   \ | __/ _ \ '_ \ / _` | '_ \| |/ _ \
+\   \/   / | ||  __/ | | | (_| | |_) | |  __/
+ \ ____ /   \__\___|_| |_|\__,_|_.__/|_|\___|
+
+I would love the opportunity!
+https://careers.tenable.com/?p=job%2Fo5CV2fwo
+
+-->
+
+  <head>
+    <title>Tenable Security - Code Challenge</title>
+
+    <!-- social media tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@caiticoco">
+    <meta name="twitter:title" content="Tenable Security">
+    <meta name="twitter:description" content="Tenable Security">
+    <meta name="twitter:creator" content="@caiticoco">
+    <meta name="twitter:image:src" content="">
+    <meta property="og:title" content="Tenable Security" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:description" content="">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- font awesome from BootstrapCDN -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Google fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="main.css" />
+
+    <!-- JavaScript -->
+    <script   src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+
+    <script>
+    $(document).ready(function() {
+        var hostList = [];
+
+        $.ajax({url: "http://localhost:8080/api", success: function(result) {
+            hostList = result.configurations;
+
+            $.each(hostList, function(i) {
+                $("select").append("<option value=" + hostList[i].id + ">" + hostList[i].name + "</option>")
+            })
+        }});
+    });
+
+    function hostSelectHandler(e) {
+        $.ajax({url: "http://localhost:8080/api?host=" + $(e).val(), success: function(result) {
+            console.log(result);
+            refreshHostInfo(result);
+        }});
+    }
+
+    function refreshHostInfo(selectedHost) {
+        var hostUrl = selectedHost.hostname + ":" + selectedHost.port;
+        $('.host_info .hostname')
+            .text(hostUrl)
+            .attr('href', hostUrl);
+
+        $('.host_info .username').text(selectedHost.username);
+    }
+    </script>
+
+
+  </head>
+  <body>
+
+    <div class="container">
+        <div class="action_box">
+            <p class="headline">Which host would you like to view?</p>
+
+            <div class="select_style">
+                <span></span>
+                <select onchange="hostSelectHandler(this)"></select>
+            </div>
+
+            <div class="large"></div>
+
+            <div class="host_info">
+                <h2>Host1</h2>
+                <ul>
+                    <li>Host Name: <a class="hostname" target="_blank"></a></li>
+                    <li>Username: <span class="username"></span></li>
+                </ul>
+            </div>
+
+            <div class="logo_responsive"></div>
+
+        </div>
+
+        <div class="logo"></div>
+        <div class="accent"></div>
+    </div>
+
+  </body>
+</html>
